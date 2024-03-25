@@ -1,5 +1,7 @@
 # Triangulation for big data
-Triangulation for point cloud with big size involves CGAL. The input file should be in xyz or txt format.
+Triangulation for point clouds with big size involves CGAL. This tool is provided by Yunting Song, a PhD student in our GeoVis group at UMD.
+
+The input file should be in xyz or txt format.
 
 Steps to complie the CGAL tool:
 1. load the following modules in the cluster
