@@ -13,7 +13,7 @@ def Convert_tri2vtk(tin_file,tin_output_folder):
     tris: triangles of TIN. each triangle is saved as [vid1, vid2, vid3]. vid is point index based on points1
     '''
     tin_basename = os.path.basename(tin_file)
-    VTK_file = tin_output_folder + '/' + os.path.splitext(tin_basename)[0]  + '_test.VTK'
+    VTK_file = tin_output_folder + '/' + os.path.splitext(tin_basename)[0]  + '.VTK'
     
     if os.path.splitext(tin_basename)[1] == '.tri':
         with open(tin_file) as infile:
@@ -100,6 +100,6 @@ def Convert_tri2vtk(tin_file,tin_output_folder):
 if __name__ == '__main__':
     print("This is used for converting a TIN file from off/tri to a vtk file.")
     # sys.argv[1] should be the TIN file name
-    # # sys.argv[2] should be the output tin directory folder
+    # # sys.argv[2] should be the output vtk directory folder
     vtk = Convert_tri2vtk(sys.argv[1], sys.argv[2])
     print("The convertion from a TIN to a vtk file is done!")
