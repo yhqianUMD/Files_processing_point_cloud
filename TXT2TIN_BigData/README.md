@@ -13,3 +13,10 @@ Steps to complie the CGAL tool:
 2. go to the sources direcory, cmake CMakeLists.txt
 3. make
 4. triangulation: ./dtri ana.xyz
+
+Note:
+The gsapp13 cluster has been updated. Run the following before triangulation.
+```
+conda activate py39
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
+```
