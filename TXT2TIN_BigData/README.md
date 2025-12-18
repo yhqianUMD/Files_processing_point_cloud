@@ -14,7 +14,10 @@ Steps to complie the CGAL tool:
    ```
 3. go to the sources direcory, cmake CMakeLists.txt
 4. make
-5. triangulation: ./dtri ana.xyz
+5. triangulation:
+```
+./dtri ana.xyz
+```
 
 Note:
 The gsapp13 cluster has been updated. Run the following before triangulation.
@@ -22,3 +25,8 @@ The gsapp13 cluster has been updated. Run the following before triangulation.
 conda activate py39
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
 ```
+
+6. command for triangulation with alpha shape value:
+   ```
+   ./cgal_as_lite /gpfs/data1/cgis1gp/yuehui/data/ALS_L1B_20190410/ALS_L1B_20190410T164528_165720_coor_4decimal_downsample.txt 100000
+   ```
