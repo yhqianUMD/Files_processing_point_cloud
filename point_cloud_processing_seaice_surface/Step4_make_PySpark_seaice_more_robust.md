@@ -16,7 +16,7 @@ def elim_V2_paths(reversed_V2_paths, one_Co_t_ids):
 elim_V2_paths_udf = udf(elim_V2_paths, ArrayType(ArrayType(IntegerType())))
 ```
 
-Now:
+Now (12/19/2025):
 ```
 # a function to eliminate the involved V2-paths
 def elim_V2_paths(reversed_V2_paths, one_Co_t_ids):
@@ -117,7 +117,7 @@ def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
 
 reverse_V2_ET_udf = udf(reverse_V2_ET, ArrayType(ArrayType(IntegerType())))
 ```
-Now:
+New update on 12/19/2025:
 ```
 # a function to reverse the Forman gradient (V1-paths)
 def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
@@ -170,6 +170,76 @@ def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
                         lst2.append(pot_saddle_unique_co_t) # add the other end point of this saddle
                     new_V2_paths.append(lst1+lst2)
                     
+            return new_V2_paths
+    else:
+        return V2_paths
+
+reverse_V2_ET_udf = udf(reverse_V2_ET, ArrayType(ArrayType(IntegerType())))
+```
+
+New update on 01/15/2026:
++ remove the case of return None
++ add the special case when there is only one path in V2_paths
+```
+# a function to reverse the Forman gradient (V1-paths)
+def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
+    if two_Saddle_Co_t_id:
+        index_to_reverse = -1
+#         for i in range(len(V2_paths)):
+#             if V2_paths[i][0] in two_Saddle_Co_t_id:
+#                 index_to_reverse = i
+#                 # get the co-boundary triangle this saddle and this co-boundary triangle is not contained in this component
+#                 if V2_paths[i][0] == two_Saddle_Co_t_id[0]:
+#                     pot_saddle_unique_co_t = two_Saddle_Co_t_id[1]
+#                 else:
+#                     pot_saddle_unique_co_t = two_Saddle_Co_t_id[0]
+#                 break
+        
+        sad_Co_t0_connected_with_crit_t = False
+        sad_Co_t1_connected_with_crit_t = False
+        pot_saddle_unique_co_t = None
+        for i in range(len(V2_paths)):
+            if V2_paths[i][0] in two_Saddle_Co_t_id:
+                index_to_reverse = i
+#                 if len(two_Saddle_Co_t_id) < 2:
+#                     break
+                # get the co-boundary triangle this saddle and this co-boundary triangle is not contained in this component
+                if len(two_Saddle_Co_t_id) > 1 and V2_paths[i][0] == two_Saddle_Co_t_id[0]:
+                    pot_saddle_unique_co_t = two_Saddle_Co_t_id[1]
+                    sad_Co_t0_connected_with_crit_t = True
+                if len(two_Saddle_Co_t_id) > 1 and V2_paths[i][0] == two_Saddle_Co_t_id[1]:
+                    pot_saddle_unique_co_t = two_Saddle_Co_t_id[0]
+                    sad_Co_t1_connected_with_crit_t = True
+        
+#         if sad_Co_t0_connected_with_crit_t and sad_Co_t1_connected_with_crit_t:
+#             # both of the two extreme vertices of a saddle are connected with crit_v
+#             return None
+                
+        if index_to_reverse != -1:
+           #  V2_paths[index_to_reverse].reverse()
+            # concatenate the V-paths
+            new_V2_paths = []
+            set_reverse = set(V2_paths[index_to_reverse])
+            for i in range(len(V2_paths)):
+                if i != index_to_reverse:
+                    # test if part of V2_paths[index_to_reverse] is already in V2_paths[i]
+                    set1 = set(V2_paths[i])
+                    common_tri_id = set1.intersection(set_reverse)
+                    lst1 = V2_paths[i][0:(len(V2_paths[i]) - len(common_tri_id) + 1)]
+                    lst2 = V2_paths[index_to_reverse][0:(len(V2_paths[index_to_reverse]) - len(common_tri_id))]
+                    lst2.reverse()
+                    if pot_saddle_unique_co_t:
+                        lst2.append(pot_saddle_unique_co_t) # add the other end point of this saddle
+                    new_V2_paths.append(lst1+lst2)
+                    
+            if len(new_V2_paths) == 0: # a special case when there is only one path in V2_paths
+                V2_paths_origin = V2_paths[i]
+                V2_paths_origin.reverse()
+                if pot_saddle_unique_co_t:
+                    V2_paths_origin.append(pot_saddle_unique_co_t)
+                    
+                new_V2_paths.append(V2_paths_origin)
+                
             return new_V2_paths
     else:
         return V2_paths
