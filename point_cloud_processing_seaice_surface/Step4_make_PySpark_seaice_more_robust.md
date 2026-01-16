@@ -233,7 +233,7 @@ def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
                     new_V2_paths.append(lst1+lst2)
                     
             if len(new_V2_paths) == 0: # a special case when there is only one path in V2_paths
-                V2_paths_origin = V2_paths[i]
+                V2_paths_origin = V2_paths[index_to_reverse]
                 V2_paths_origin.reverse()
                 if pot_saddle_unique_co_t:
                     V2_paths_origin.append(pot_saddle_unique_co_t)
@@ -301,7 +301,7 @@ def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
                     new_V2_paths.append(lst1+lst2)
                     
             if len(new_V2_paths) == 0: # a special case when there is only one path in V2_paths
-                V2_paths_origin = V2_paths[i]
+                V2_paths_origin = V2_paths[index_to_reverse]
                 V2_paths_origin.reverse()
                 if pot_saddle_unique_co_t:
                     V2_paths_origin.append(pot_saddle_unique_co_t)
