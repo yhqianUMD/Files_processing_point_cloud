@@ -314,3 +314,88 @@ def reverse_V2_ET(two_Saddle_Co_t_id, V2_paths):
 
 reverse_V2_ET_udf = udf(reverse_V2_ET, ArrayType(ArrayType(IntegerType())))
 ```
+
+## 4. Update "contract_VE()" in "Seaice_step7_resimplify_r1_step5_reverse_eliminate_V1_V2_threshold.ipynb"
+Update on 01/16/2026:
++ do not simplify the minimum-saddle pair if the saddle has a elevation greater than 0.6m
+```
+if simplify_with_order == '1' or simplify_with_order == 'yes' or simplify_with_order == 'y':
+    # check if the saddle-minima pair could be contracted
+    def contract_VE(pot_saddle, pot_minimum, multi_components_VE, multi_Max_tri):
+        # pot_saddle: the center saddle, which is the saddle to be contracted in the saddle-minima pair
+        # pot_minimum: the critical vertex to be contracted in the saddle-minima pair
+        # multi_components_VE: the other critical vertices that are connected with the pot_saddle
+        # multi_Max_tri: the critical triangles that are connected with the pot_saddle
+        
+        if pot_saddle == None or pot_minimum == None:
+            return
+        
+        persist_value = pot_saddle[0] - pot_minimum
+#         persist_value_thre = 1000
+#         if persist_value < persist_value_thre:
+#             less_than_thre = True
+#         else:
+#             less_than_thre = False
+        
+        less_than_thre = True
+        smallest_mini_saddle = True
+        smallest_max_saddle = True
+        if len(multi_components_VE) > 0:
+            for crit_ver in multi_components_VE:
+                if pot_saddle[0] - crit_ver < persist_value:
+                # if crit_ver < pot_minimum:
+                    smallest_mini_saddle = False
+                    
+        if len(multi_Max_tri) > 0:
+            for crit_tri in multi_Max_tri:
+                if crit_tri[0] - pot_saddle[0] < persist_value:
+                    smallest_max_saddle = False
+            
+        contract = smallest_mini_saddle and smallest_max_saddle and less_than_thre
+        return contract
+else:
+    print("Simplification according to elevation!")
+    # get the elevation values of each vertex
+    df_ver_order = df_ver_order.sort(col('self_order'), ascending=True)
+
+    # collect df_ver_order as a global array 
+    df_ver_order_col = df_ver_order.collect()
+    # check if the saddle-minima pair could be contracted
+    
+    def contract_VE(pot_saddle, pot_minimum, multi_components_VE, multi_Max_tri):
+        # pot_saddle: the center saddle, which is the saddle to be contracted in the saddle-minima pair
+        # pot_minimum: the critical vertex to be contracted in the saddle-minima pair
+        # multi_components_VE: the other critical vertices that are connected with the pot_saddle
+        # multi_Max_tri: the critical triangles that are connected with the pot_saddle
+        
+        if pot_saddle == None or pot_minimum == None:
+            return
+        
+        persist_value = df_ver_order_col[pot_saddle[0]]['ele'] - df_ver_order_col[pot_minimum]['ele']
+        persist_value_thre = 0.25
+        if persist_value < persist_value_thre:
+            less_than_thre = True
+        else:
+            less_than_thre = False
+        
+    #     less_than_thre = True
+        smallest_mini_saddle = True
+        smallest_max_saddle = True
+        if len(multi_components_VE) > 0:
+            for crit_ver in multi_components_VE:
+                if df_ver_order_col[pot_saddle[0]]['ele'] - df_ver_order_col[crit_ver]['ele'] < persist_value:
+                # if crit_ver < pot_minimum:
+                    smallest_mini_saddle = False
+                    
+        if len(multi_Max_tri) > 0:
+            for crit_tri in multi_Max_tri:
+                if df_ver_order_col[crit_tri[0]]['ele'] - df_ver_order_col[pot_saddle[0]]['ele'] < persist_value:
+                    smallest_max_saddle = False
+            
+        saddle_smaller_than_thre = True
+        if df_ver_order_col[pot_saddle[1]]['ele'] >= 0.6:
+            saddle_smaller_than_thre = False
+            
+        contract = smallest_mini_saddle and smallest_max_saddle and saddle_smaller_than_thre and less_than_thre
+        return contract
+```
