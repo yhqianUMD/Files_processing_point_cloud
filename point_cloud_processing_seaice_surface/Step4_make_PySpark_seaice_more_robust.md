@@ -399,3 +399,74 @@ else:
         contract = smallest_mini_saddle and smallest_max_saddle and saddle_smaller_than_thre and less_than_thre
         return contract
 ```
+## 5. Update bfs_df() in Seaice_step4_save_V1_V2_paths.ipynb
+
+Previous:
+```
+def bfs_df(multi_SdlPts, subgraphs):
+    # Perform a breadth-first search on a single graph
+    
+    # subgraphs is a list of dictionaries, we need to convert it to a single dictionary
+    subgraphs_dict = {}
+    for d in subgraphs:
+        subgraphs_dict = {**subgraphs_dict, **d}
+        
+    if multi_SdlPts == None:
+        return
+    
+    V1_paths = []
+    for i in range(len(multi_SdlPts)):
+        queue = multi_SdlPts.pop(0)
+        V1_path_temp = []
+        while queue:
+            node = queue
+            V1_path_temp.append(node)
+            neighbors = subgraphs_dict.get(node, [])
+            if neighbors != []:
+                queue = neighbors
+            else:
+                queue = None
+                
+        if queue == 0: # only when the component (critical vertex itself is 0)
+            V1_path_temp.append(queue)
+        V1_paths.append(V1_path_temp)
+        
+    return V1_paths
+
+bfs_df_udf = udf(bfs_df, ArrayType(ArrayType(IntegerType())))
+```
+Update on 01/16/2026
+```
+import collections
+def bfs_12152025(multi_Saddles_pts, subgraphs):
+    '''
+    multi_Saddles_pts: an array of string or an array of integers
+    subgraphs: an array of dictionary, where each key is a string (or integer) and the corresponding value is also a string (or integer)
+    '''
+    if not multi_Saddles_pts:
+        return None
+    # Build the adjacency list from the list of edge dictionaries
+    adj_list = collections.defaultdict()
+    for edge_dict in subgraphs:
+        # Assuming each dictionary has only one key-value pair representing an edge
+        for source, destination in edge_dict.items():
+            adj_list[source] = destination
+
+    V1_paths = []
+    for i in range(len(multi_Saddles_pts)):
+        node = multi_Saddles_pts[i]
+        V1_path_temp = []
+        V1_path_temp_set = set()
+        
+        while node != -1 and node not in V1_path_temp_set:
+            V1_path_temp.append(node)
+            V1_path_temp_set.add(node)
+            next_node = adj_list.get(node, -1)
+            node = next_node
+        
+        V1_paths.append(V1_path_temp)
+    
+    return V1_paths
+
+bfs_df_udf = udf(bfs_12152025, ArrayType(ArrayType(IntegerType())))
+```
