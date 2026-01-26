@@ -6,6 +6,7 @@
 + File Name: Select your .txt file.
 + File Format: Custom delimiters > Check the boxes for both Tab and Space.
 + Record and Fields Options: Uncheck "First record has field names".
++ If you want to load the point cloud as decimal numbers, instead of strings, check the box "Detect field types".
 + Geometry Definition:
   * X field: Select field_1 (your Easting/Longitude equivalent).
   * Y field: Select field_2 (your Northing/Latitude equivalent).
