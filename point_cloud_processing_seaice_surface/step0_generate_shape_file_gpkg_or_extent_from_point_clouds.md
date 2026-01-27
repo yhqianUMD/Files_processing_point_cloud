@@ -15,10 +15,10 @@
 
 # The following are the steps to generate a rectangle shape file or extent from a point cloud stored in txt or xyz format.
 
-## Step 1: Load the txt file "Add Layer" -> "Vector Layer"
++ Step 1: Load the txt file "Add Layer" -> "Vector Layer"
 
-## Step 2: Search for the tool "Extract layer extent".
++ Step 2: Search for the tool "Extract layer extent".
 
-## Step 3: Input layer -> Select your point cloud txt file.
++ Step 3: Input layer -> Select your point cloud txt file.
 
-## Step 4: clip Run.
++ Step 4: clip Run.
