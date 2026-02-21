@@ -10,12 +10,16 @@
   + outputs: dx and dy distance
   + notes:
      * We can compute the vx and vy by considering the timing of the two segments.
-     * Once we have vx and vy, we can use drift_correct_ALS_point_clouds_02092026.ipynb to drift correct one of the ALS segments to validate if vx and vy is correct.
+     * Once we have vx and vy, we can use drift_correct_ALS_point_clouds_02092026.ipynb to drift correct one of the ALS segments to validate if vx and vy are correct.
 
 ## Step 2. Drift correct the ICESat-2
   + Python code: Step2_Read_ICESat-2_projection_drift_correct.py
-  + inputs: raw ICESat-2 profile photons without re-projection and elevation correction (DTU21).
+  + inputs: raw ICESat-2 profile photons without re-projection but with elevation correction (DTU21).
   + outputs: A csv or txt file represented the projected, elevation-corrected (DTU21), and drift-corrected ICESat-2 profile.
+  + Notes:
+    * Python code to drift correct ALS segments: Step2_Read_ALS_txt_from_Kyle_projection_subtraction_mean_sea_drift_correction_02092026.py
+    * inputs: the raw ALS point cloud without projection and sea surface level correction (DTU21).
+    * outputs: a drift corrected ALS point cloud in xyz format.
 
 ## Step3. Interpolate the elevation values of the ALS segment along the ICESat-2 profile
   + Code: the terrain_trees library for interpolation.
