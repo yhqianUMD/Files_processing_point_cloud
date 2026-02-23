@@ -24,6 +24,7 @@
 ## Step3. Interpolate the elevation values of the ALS segment along the ICESat-2 profile
   + Code: the terrain_trees library for interpolation.
   + inputs: TIN, kv, ele_rela_to_sea_surface, ICESat-2 profile with only x and y.
+  + Note: for the input of the ICESat-2 profile with only x and y, we do not need to crop this profile to limit it to the area of TIN, as the terrain tree library will only interpolate the points within TIN.
 
 
 ## Step4. Plot the corrected ALS and ICESat-2 profile
