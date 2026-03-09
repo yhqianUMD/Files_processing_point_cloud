@@ -1,3 +1,13 @@
+## Pre-step0.Project from nc file to xyz file and stores the x, y, t, and z columns
+  + Python code: PreStep0_Read_ALS_nc_03092026.py
+  + input: the nc file and a boolean value "bool_save" to save the file or not
+  + output: a xyz file storing x, y, t, z
+  + Notes:
+    * the t is gps_utc_offset, which is processed via "t_gps_2018 = utc_unix - unix_ref_2018_sec + gps_utc_offset"
+    * the points stored in the output file have been projected to ESPG3413, and subtracted the mean sea surface via DTU2021
+    * the output is a whole segment, we may need to use the CloudCompare to crop a portition of the points, where the cropped output in CloudCompare stores x, y, z, t
+    * if Pre-step0 is conducted, Step 0 is not needed.
+
 ## Step 0. Project and subtract the mean sea surface for ALS point clouds.
   + Python code: Step0_Read_ALS_txt_from_Kyle_12162025.py
   + input: raw point cloud in txt
